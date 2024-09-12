@@ -1,0 +1,307 @@
+openapi: 3.0.0
+info:
+  title: Analytics Engine API
+  description: API for interacting with the Analytics Engine Module, providing endpoints for fire behavior prediction, resource optimization, risk assessment, smoke dispersion modeling, and drone data analysis.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+  - url: https://api.example.com
+    description: Production server
+
+paths:
+  /fire-behavior/predict:
+    get:
+      summary: Predict fire behavior
+      description: Get fire behavior predictions based on input parameters.
+      parameters:
+        - name: weather_conditions
+          in: query
+          required: true
+          description: Weather conditions affecting the fire.
+          schema:
+            type: object
+            properties:
+              temperature:
+                type: number
+                format: float
+              humidity:
+                type: number
+                format: float
+              wind_speed:
+                type: number
+                format: float
+        - name: topography
+          in: query
+          required: true
+          description: Topographic details of the area.
+          schema:
+            type: object
+            properties:
+              slope:
+                type: number
+                format: float
+              aspect:
+                type: number
+                format: float
+        - name: fuel_type
+          in: query
+          required: true
+          description: Type of fuel in the area.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response with fire behavior prediction
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  spread_rate:
+                    type: number
+                    format: float
+                  intensity:
+                    type: number
+                    format: float
+                  direction:
+                    type: string
+        '400':
+          description: Bad request due to invalid input parameters
+        '500':
+          description: Internal server error
+
+  /resource-optimization/allocate:
+    post:
+      summary: Optimize resource allocation
+      description: Allocate resources optimally based on current fire conditions and resource availability.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                current_fire_conditions:
+                  type: object
+                  properties:
+                    fire_size:
+                      type: number
+                      format: float
+                    fire_intensity:
+                      type: number
+                      format: float
+                available_resources:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      resource_type:
+                        type: string
+                      quantity:
+                        type: number
+                        format: int
+      responses:
+        '200':
+          description: Successful response with optimized resource allocation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  allocated_resources:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        resource_type:
+                          type: string
+                        quantity:
+                          type: number
+                          format: int
+        '400':
+          description: Bad request due to invalid input parameters
+        '500':
+          description: Internal server error
+
+  /risk-assessment/calculate:
+    get:
+      summary: Calculate risk assessment
+      description: Get risk assessment based on current fire conditions and historical data.
+      parameters:
+        - name: current_conditions
+          in: query
+          required: true
+          description: Current conditions affecting the risk assessment.
+          schema:
+            type: object
+            properties:
+              weather_conditions:
+                type: object
+                properties:
+                  temperature:
+                    type: number
+                    format: float
+                  humidity:
+                    type: number
+                    format: float
+                  wind_speed:
+                    type: number
+                    format: float
+              fuel_type:
+                type: string
+        - name: historical_data
+          in: query
+          description: Historical data for risk assessment.
+          schema:
+            type: object
+            properties:
+              previous_fire_incidents:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    location:
+                      type: string
+                    size:
+                      type: number
+                      format: float
+                    intensity:
+                      type: number
+                      format: float
+      responses:
+        '200':
+          description: Successful response with risk assessment results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  risk_level:
+                    type: string
+                  risk_factors:
+                    type: object
+        '400':
+          description: Bad request due to invalid input parameters
+        '500':
+          description: Internal server error
+
+  /smoke-dispersion/simulate:
+    post:
+      summary: Simulate smoke dispersion
+      description: Simulate the dispersion of smoke based on fire conditions and weather data.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fire_conditions:
+                  type: object
+                  properties:
+                    fire_size:
+                      type: number
+                      format: float
+                    fire_intensity:
+                      type: number
+                      format: float
+                weather_conditions:
+                  type: object
+                  properties:
+                    wind_speed:
+                      type: number
+                      format: float
+                    temperature:
+                      type: number
+                      format: float
+      responses:
+        '200':
+          description: Successful response with smoke dispersion simulation results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  smoke_concentration:
+                    type: number
+                    format: float
+                  affected_area:
+                    type: string
+        '400':
+          description: Bad request due to invalid input parameters
+        '500':
+          description: Internal server error
+
+  /drone-analysis/detect-fire:
+    post:
+      summary: Detect fire from drone imagery
+      description: Analyze drone imagery to detect and assess fire.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Successful response with fire detection results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fire_detected:
+                    type: boolean
+                  fire_perimeter:
+                    type: string
+                  fire_intensity:
+                    type: number
+                    format: float
+        '400':
+          description: Bad request due to invalid input parameters
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    WeatherConditions:
+      type: object
+      properties:
+        temperature:
+          type: number
+          format: float
+        humidity:
+          type: number
+          format: float
+        wind_speed:
+          type: number
+          format: float
+    Topography:
+      type: object
+      properties:
+        slope:
+          type: number
+          format: float
+        aspect:
+          type: number
+          format: float
+    FuelType:
+      type: string
+
+tags:
+  - name: Fire Behavior
+    description: Operations related to fire behavior prediction
+  - name: Resource Optimization
+    description: Operations related to optimizing resource allocation
+  - name: Risk Assessment
+    description: Operations related to assessing fire risk
+  - name: Smoke Dispersion
+    description: Operations related to simulating smoke dispersion
+  - name: Drone Analysis
+    description: Operations related to analyzing drone imagery for fire detection
+

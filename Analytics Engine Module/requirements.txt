@@ -1,0 +1,23 @@
+# Core libraries
+fastapi==0.95.2
+uvicorn[standard]==0.22.0
+
+# Machine learning and deep learning
+tensorflow==2.12.0
+torch==2.1.0
+scikit-learn==1.2.2
+dask==2023.8.1
+
+# Data processing and manipulation
+pandas==2.1.0
+numpy==1.25.1
+pyarrow==12.0.1
+
+# Database and caching
+psycopg2-binary==2.9.6
+redis==4.6.0
+
+# Additional utilities
+pybind11==2.10.4
+requests==2.31.0
+pydantic==2.0.2

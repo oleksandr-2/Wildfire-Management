@@ -1,0 +1,198 @@
+openapi: 3.0.0
+info:
+  title: Comprehensive Wildfire Common Operating Picture (CoP) API
+  description: API for interacting with the CoP System, providing endpoints for data ingestion, analytics, visualization, decision support, and autonomous drone operations.
+  version: 1.0.0
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+  - url: https://api.staging.example.com/v1
+    description: Staging server
+paths:
+  /data-ingestion:
+    get:
+      summary: Retrieve data ingestion status
+      responses:
+        '200':
+          description: Data ingestion status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "active"
+                  last_update:
+                    type: string
+                    format: date-time
+                    example: "2024-08-08T14:00:00Z"
+    post:
+      summary: Submit new data for ingestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  description: The data to be ingested
+                  example:
+                    temperature: 28
+                    humidity: 65
+                    location:
+                      latitude: 45.123
+                      longitude: -123.456
+      responses:
+        '202':
+          description: Data submitted for ingestion
+        '400':
+          description: Invalid data format
+
+  /analytics/fire-prediction:
+    get:
+      summary: Get fire behavior prediction
+      parameters:
+        - name: location
+          in: query
+          description: Latitude and longitude of the location to predict fire behavior
+          required: true
+          schema:
+            type: object
+            properties:
+              latitude:
+                type: number
+                format: float
+                example: 45.123
+              longitude:
+                type: number
+                format: float
+                example: -123.456
+      responses:
+        '200':
+          description: Fire prediction data retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  risk_level:
+                    type: string
+                    example: "high"
+                  prediction:
+                    type: string
+                    example: "The fire is expected to spread rapidly."
+        '400':
+          description: Invalid location data
+
+  /visualization/dashboard:
+    get:
+      summary: Get the interactive geospatial dashboard
+      responses:
+        '200':
+          description: Dashboard data retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  map_data:
+                    type: object
+                    description: Geospatial map data
+                  analytics_data:
+                    type: object
+                    description: Data for visualization
+        '500':
+          description: Internal server error
+
+  /decision-support/recommendations:
+    get:
+      summary: Get AI-assisted recommendations
+      responses:
+        '200':
+          description: Recommendations retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  recommendations:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - "Deploy additional resources to sector A"
+                      - "Monitor wind conditions closely"
+        '500':
+          description: Internal server error
+
+  /drone-operations/status:
+    get:
+      summary: Retrieve status of autonomous drone operations
+      responses:
+        '200':
+          description: Drone operations status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "operational"
+                  active_drones:
+                    type: integer
+                    example: 12
+        '500':
+          description: Internal server error
+
+  /collaboration/public-info:
+    get:
+      summary: Retrieve public information
+      responses:
+        '200':
+          description: Public information retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  information:
+                    type: string
+                    example: "Fire danger is high in the northern regions. Please avoid travel."
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: "Invalid request data"
+    Data:
+      type: object
+      properties:
+        temperature:
+          type: number
+          example: 28
+        humidity:
+          type: number
+          example: 65
+        location:
+          type: object
+          properties:
+            latitude:
+              type: number
+              format: float
+              example: 45.123
+            longitude:
+              type: number
+              format: float
+              example: -123.456
